@@ -36,8 +36,7 @@ WORKDIR /var/www
 # Copie des fichiers du projet
 COPY . /var/www
 
-# Créer un fichier .env par défaut si absent
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
 
 # Installation des dépendances Composer
 RUN composer install --no-interaction --no-scripts --no-progress --prefer-dist
