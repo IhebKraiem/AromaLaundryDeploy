@@ -55,6 +55,12 @@ RUN php artisan config:clear
 RUN chown -R www-data:www-data \
     /var/www/storage \
     /var/www/bootstrap/cache
+# Définir les permissions pour les répertoires storage et bootstrap/cache
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+RUN npm install
+
 
 EXPOSE 9000
 
