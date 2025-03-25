@@ -29,6 +29,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    command: bash -c "npm install && npm run dev && php-fpm"
     networks:
       - laravel_network
 
