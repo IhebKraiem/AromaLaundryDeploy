@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
+    netcat-openbsd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation des extensions PHP avec zip
