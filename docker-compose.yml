@@ -18,8 +18,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       retries: 5
-      start_period: 10s
-      timeout: 5s
+      start_period: 40s
+      timeout: 10s
 
   laravel:
     build: .
@@ -29,7 +29,25 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: bash -c "npm install && npm run dev && php-fpm"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=secret
+    command: >
+      bash -c "
+        while ! nc -z db 3306; do
+          echo 'Waiting for MySQL to be ready...' 
+          sleep 5
+        done
+        composer install
+        php artisan migrate --force
+        php artisan key:generate
+        npm install
+        npm run build
+        php-fpm
+      "
     networks:
       - laravel_network
 
@@ -51,3 +69,4 @@ volumes:
 
 networks:
   laravel_network:
+    driver: bridge

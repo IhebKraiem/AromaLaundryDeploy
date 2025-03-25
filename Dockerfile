@@ -10,8 +10,6 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
-    nodejs \
-    npm \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installation des extensions PHP avec zip
@@ -25,6 +23,10 @@ RUN docker-php-ext-configure zip \
     gd \
     zip
 
+# Installation de Node.js et npm (version 20.x)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -34,14 +36,20 @@ WORKDIR /var/www
 # Copie des fichiers du projet
 COPY . /var/www
 
-# Installer les dépendances Composer sans interaction
+# Créer un fichier .env par défaut si absent
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
+# Installation des dépendances Composer
 RUN composer install --no-interaction --no-scripts --no-progress --prefer-dist
 
-# Installer les dépendances npm
+# Installation des dépendances npm
 RUN npm install
 
 # Générer la clé d'application Laravel
 RUN php artisan key:generate
+
+# Nettoyer le cache de configuration
+RUN php artisan config:clear
 
 # Permissions
 RUN chown -R www-data:www-data \
