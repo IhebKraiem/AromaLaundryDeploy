@@ -52,8 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://erp.aroma-laundry.com'),
- 
+    'url' => env('APP_URL', 'http://erp.aroma-laundry.com'), 
 
     /*
     |--------------------------------------------------------------------------
