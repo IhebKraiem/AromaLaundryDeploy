@@ -26,6 +26,7 @@ services:
     container_name: laravel_app
     volumes:
       - .:/var/www/html
+      - /etc/letsencrypt/live/erp.aroma-laundry.com:/etc/letsencrypt/live/erp.aroma-laundry.com:ro 
     depends_on:
       db:
         condition: service_healthy
@@ -57,7 +58,7 @@ services:
     volumes:
       - .:/var/www/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt/live/erp.aroma-laundry.com:/etc/letsencrypt/live/erp.aroma-laundry.com:ro  # Monter les certificats SSL
+      - /etc/letsencrypt/live/erp.aroma-laundry.com:/etc/letsencrypt/live/erp.aroma-laundry.com:ro  
     ports:
       - "80:80"
       - "443:443"  
