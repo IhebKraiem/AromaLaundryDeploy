@@ -38,12 +38,12 @@ WORKDIR /var/www
 COPY . /var/www
 
 
-
+RUN npm install
 # Installation des dépendances Composer
 RUN composer install --no-interaction --no-scripts --no-progress --prefer-dist
 
 # Installation des dépendances npm
-RUN npm install
+
 
 # Générer la clé d'application Laravel
 RUN php artisan key:generate
